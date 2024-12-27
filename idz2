@@ -1,0 +1,44 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import numpy as np
+from collections import deque
+
+def shortest_path_in_maze(maze, start, end):
+    rows, cols = len(maze), len(maze[0])
+    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+
+    queue = deque([(start, 0)])  # (текущая позиция, длина пути)
+    visited = set()
+    visited.add(start)
+
+    while queue:
+        (x, y), dist = queue.popleft()
+
+        if (x, y) == end:
+            return dist
+
+        for dx, dy in directions:
+            nx, ny = x + dx, y + dy
+
+            if 0 <= nx < rows and 0 <= ny < cols and maze[nx][ny] == 0 and (nx, ny) not in visited:
+                visited.add((nx, ny))
+                queue.append(((nx, ny), dist + 1))
+
+    return -1  # Путь не найден
+
+# Пример лабиринта
+maze = [
+    [0, 1, 0, 0, 0],
+    [0, 1, 0, 1, 0],
+    [0, 0, 0, 1, 0],
+    [0, 1, 1, 1, 0],
+    [0, 0, 0, 0, 0]
+]
+
+start = (0, 0)  # Начальная позиция
+end = (4, 4)    # Конечная позиция
+
+# Поиск кратчайшего пути
+path_length = shortest_path_in_maze(maze, start, end)
+print("Длина кратчайшего пути:", path_length)
